@@ -65,6 +65,24 @@ class Tree
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
     pretty_print(node.left, "#{prefix}#{is_left ? '    ' : '│   '}", true) if node.left
   end
+
+  private
+
+  def single_child?(node)
+    if node.right != nil
+      if node.right.right.nil? && node.right.left.nil?
+        true
+      end
+      false
+    end
+    if node.left != nil
+      if node.left.right.nil? && node.left.left.nil?
+        true
+      end
+      false
+    end
+    false
+  end
  
 end
 
