@@ -68,6 +68,13 @@ class Tree
 
   private
 
+  def no_child?(node)
+    if node.right.nil? && node.left.nil?
+      true
+    end
+    false
+  end
+
   def single_child?(node)
     if node.right != nil
       if node.right.right.nil? && node.right.left.nil?
