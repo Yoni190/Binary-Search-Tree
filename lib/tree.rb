@@ -16,8 +16,14 @@ class Tree
     end
 
     root = Node.new(sorted_array[mid])
-    root.left = build_tree(sorted_array[start_index..mid - 1])
-    root.right = build_tree(sorted_array[mid + 1..end_index])
+    left_arr = sorted_array[start_index..mid - 1]
+    right_arr = sorted_array[mid + 1..end_index]
+    if !left_arr.empty?
+      root.left = build_tree(left_arr)
+    end
+    if !right_arr.empty?
+      root.right = build_tree(right_arr)
+    end
 
     root
   end
@@ -26,9 +32,31 @@ class Tree
     if root.nil?
       root = Node.new(value)
     elsif root.data < value
-      insert(value, root.right)
+      if root.right.nil?
+        root.right = Node.new(value)
+      else
+        insert(value, root.right)
+      end
     else
-      insert(value, root.left)
+      if root.left.nil?
+        root.left = Node.new(value)
+      else
+        insert(value, root.left)
+      end
+    end
+  end
+
+  def delete(value, root = @root)
+    if root.left.data == value
+      root.left = nil
+    elsif root.right.data == value
+      root.right = nil
+    else
+      if root.data < value
+        delete(value, root.right)
+      elsif root.data > value
+        delete(value, root.left)
+      end
     end
   end
 
