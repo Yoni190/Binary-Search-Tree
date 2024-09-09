@@ -23,21 +23,12 @@ class Tree
   end
 
   def insert(value, root = @root)
-    if value < root.data
-      left_data = root.left
-      if left_data.data.nil?
-        root.left = Node.new(value)
-        return "Node added"
-      end
-      insert(value, left_data)
+    if root.data.nil?
+      root = Node.new(value)
+    elsif root.data < value
+      insert(value, root.right)
     else
-      right_data = root.right
-      if right_data.data.nil?
-        root.right = Node.new(value)
-        return "Node Added!"
-      end
-      
-      insert(value, right_data)
+      insert(value, root.left)
     end
   end
 
@@ -49,7 +40,3 @@ class Tree
  
 end
 
-t1 = Tree.new([1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324])
-t1.pretty_print
-puts t1.insert(30)
-t1.pretty_print
