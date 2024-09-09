@@ -23,7 +23,7 @@ class Tree
   end
 
   def insert(value, root = @root)
-    if root.data.nil?
+    if root.nil?
       root = Node.new(value)
     elsif root.data < value
       insert(value, root.right)
