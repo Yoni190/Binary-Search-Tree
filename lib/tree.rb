@@ -117,6 +117,29 @@ class Tree
     end
   end
 
+  def level_order
+    queue = Queue.new
+    arr_of_nodes = []
+    root = @root
+
+      queue.enq(root)
+
+      queue.enq(root.left)
+      queue.enq(root.right)
+      arr_of_nodes.push(queue.deq)
+      while !queue.empty?
+        arr_of_nodes.push(queue.deq)
+        root = arr_of_nodes[-1]
+        if !root.left.nil?
+          queue.enq(root.left)
+        end
+        if !root.right.nil?
+          queue.enq(root.right)
+        end
+    end
+    arr_of_nodes.map { |element| element.data}
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"

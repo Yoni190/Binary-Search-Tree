@@ -1,5 +1,5 @@
 require_relative 'lib/tree'
 
-t1 = Tree.new([1,2,3,5,6,7,8,9,40,35,30,45,42])
+t1 = Tree.new([2,3,4,5,6,7,8,1])
 t1.pretty_print
-puts t1.find(0)
+puts t1.level_order
