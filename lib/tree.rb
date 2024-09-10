@@ -111,6 +111,13 @@ class Tree
     false
   end
 
+  def two_children?(node)
+    if node.left.nil? || node.right.nil?
+      false
+    end
+    true
+  end
+
   def right_or_left(node)
     if node.right != nil && node.left.nil?
       return "right"
