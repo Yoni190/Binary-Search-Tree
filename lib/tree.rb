@@ -1,5 +1,6 @@
 require_relative "node"
 class Tree
+  @@inorder_arr = []
   attr_accessor :root
   def initialize(array)
     @root = build_tree(array)
@@ -138,6 +139,15 @@ class Tree
         end
     end
     arr_of_nodes.map { |element| element.data}
+  end
+
+  def inorder(root = @root)
+    if root.nil?
+      return @@inorder_arr.map { |element| element.data}
+    end
+    inorder(root.left)
+    @@inorder_arr.push(root)
+    inorder(root.right)
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)

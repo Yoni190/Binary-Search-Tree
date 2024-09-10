@@ -2,4 +2,4 @@ require_relative 'lib/tree'
 
 t1 = Tree.new([2,3,4,5,6,7,8,1])
 t1.pretty_print
-puts t1.level_order
+p t1.inorder
