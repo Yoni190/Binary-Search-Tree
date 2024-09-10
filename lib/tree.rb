@@ -3,7 +3,7 @@ class Tree
   @@inorder_arr = []
   @@postorder_arr = []
   @@preorder_arr = []
-  
+
   attr_accessor :root
   def initialize(array)
     @root = build_tree(array)
@@ -163,7 +163,13 @@ class Tree
   end
 
   def preorder(root = @root)
-
+    if root.nil?
+      return @@preorder_arr
+    end
+    @@preorder_arr.push(root.data)
+    preorder(root.left)
+    preorder(root.right)
+  end
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
