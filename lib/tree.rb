@@ -48,7 +48,21 @@ class Tree
 
   def delete(value, root = @root)
     if root.left.data == value
-      if single_child?(root.left)
+      if two_children?(root.left)
+        temp = root.left.right
+        if temp.left != nil
+          while temp.left.left != nil
+            temp = temp.left
+          end
+        end
+        if temp.left.nil?
+          root.left.data = temp.data
+          root.left.right = nil
+        else
+          root.left.data = temp.left.data
+          temp.left = nil
+        end
+      elsif single_child?(root.left)
         if right_or_left(root.left) == "left"
           root.left = root.left.left
           root.left.left = nil
@@ -60,7 +74,14 @@ class Tree
         root.left = nil
       end
     elsif root.right.data == value
-      if single_child?(root.right)
+      if two_children?(root.right)
+        temp = root.right.right
+        while temp.left.left != nil
+          temp = temp.left
+        end
+        root.right.data = temp.left.data
+        temp.left = nil
+      elsif single_child?(root.right)
         if right_or_left(root.right) == "left"
           root.right = root.right.left
           root.right.left = nil
