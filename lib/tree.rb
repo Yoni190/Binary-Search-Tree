@@ -110,7 +110,7 @@ class Tree
       return "Node not found"
     else
       if value == root.data
-        return value
+        return root
       else
         if value > root.data
           find(value, root.right)
@@ -170,6 +170,21 @@ class Tree
     preorder(root.left)
     preorder(root.right)
   end
+
+  def height(node = @root)
+    if node.nil?
+      return -1
+    end
+    if !node.is_a?(Node)
+      node = find(node)
+    end
+    left_height = height(node.left)
+    right_height = height(node.right)
+
+    heightT = left_height > right_height ? left_height + 1 : right_height + 1
+    heightT
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
