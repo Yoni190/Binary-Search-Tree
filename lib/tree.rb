@@ -185,6 +185,26 @@ class Tree
     heightT
   end
 
+  def depth(value, root = @root)
+    if root.nil?
+      return 0
+    end
+
+    dist = -1
+    if root.data = value
+      return dist + 1
+    end
+    dist = depth(value, root.left)
+    if dist >= 0
+      return dist + 1
+    end
+    dist = depth(value, root.right)
+    if dist >= 0
+      return dist + 1
+    end
+
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
