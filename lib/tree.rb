@@ -187,11 +187,11 @@ class Tree
 
   def depth(value, root = @root)
     if root.nil?
-      return 0
+      return -1
     end
 
     dist = -1
-    if root.data = value
+    if root.data == value
       return dist + 1
     end
     dist = depth(value, root.left)
@@ -202,7 +202,7 @@ class Tree
     if dist >= 0
       return dist + 1
     end
-
+    return dist
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)
