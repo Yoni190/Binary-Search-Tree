@@ -6,5 +6,4 @@ class Node
     self.left = nil
     self.right = nil
   end
-
 end

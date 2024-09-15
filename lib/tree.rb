@@ -1,10 +1,11 @@
-require_relative "node"
+require_relative 'node'
 class Tree
   @@inorder_arr = []
   @@postorder_arr = []
   @@preorder_arr = []
 
   attr_accessor :root
+
   def initialize(array)
     @root = build_tree(array)
   end
@@ -15,38 +16,30 @@ class Tree
     start_index = 0
     end_index = sorted_array.length - 1
     mid = sorted_array.length / 2
-    if sorted_array[start_index] == sorted_array[end_index]
-      return Node.new(sorted_array[start_index])
-    end
+    return Node.new(sorted_array[start_index]) if sorted_array[start_index] == sorted_array[end_index]
 
     root = Node.new(sorted_array[mid])
     left_arr = sorted_array[start_index..mid - 1]
     right_arr = sorted_array[mid + 1..end_index]
-    if !left_arr.empty?
-      root.left = build_tree(left_arr)
-    end
-    if !right_arr.empty?
-      root.right = build_tree(right_arr)
-    end
+    root.left = build_tree(left_arr) unless left_arr.empty?
+    root.right = build_tree(right_arr) unless right_arr.empty?
 
     root
   end
 
   def insert(value, root = @root)
     if root.nil?
-      root = Node.new(value)
+      Node.new(value)
     elsif root.data < value
       if root.right.nil?
         root.right = Node.new(value)
       else
         insert(value, root.right)
       end
+    elsif root.left.nil?
+      root.left = Node.new(value)
     else
-      if root.left.nil?
-        root.left = Node.new(value)
-      else
-        insert(value, root.left)
-      end
+      insert(value, root.left)
     end
   end
 
@@ -54,11 +47,7 @@ class Tree
     if root.left.data == value
       if two_children?(root.left)
         temp = root.left.right
-        if temp.left != nil
-          while temp.left.left != nil
-            temp = temp.left
-          end
-        end
+        temp = temp.left until temp.left.left.nil? unless temp.left.nil?
         if temp.left.nil?
           root.left.data = temp.data
           root.left.right = nil
@@ -67,10 +56,10 @@ class Tree
           temp.left = nil
         end
       elsif single_child?(root.left)
-        if right_or_left(root.left) == "left"
+        if right_or_left(root.left) == 'left'
           root.left = root.left.left
           root.left.left = nil
-        elsif right_or_left(root.left) == "right"
+        elsif right_or_left(root.left) == 'right'
           root.left = root.left.right
           root.left.right = nil
         end
@@ -80,44 +69,36 @@ class Tree
     elsif root.right.data == value
       if two_children?(root.right)
         temp = root.right.right
-        while temp.left.left != nil
-          temp = temp.left
-        end
+        temp = temp.left until temp.left.left.nil?
         root.right.data = temp.left.data
         temp.left = nil
       elsif single_child?(root.right)
-        if right_or_left(root.right) == "left"
+        if right_or_left(root.right) == 'left'
           root.right = root.right.left
           root.right.left = nil
-        elsif right_or_left(root.right) == "right"
+        elsif right_or_left(root.right) == 'right'
           root.right = root.right.right
           root.right.right = nil
         end
       else
         root.right = nil
       end
-    else
-      if root.data < value
-        delete(value, root.right)
-      elsif root.data > value
-        delete(value, root.left)
-      end
+    elsif root.data < value
+      delete(value, root.right)
+    elsif root.data > value
+      delete(value, root.left)
     end
   end
 
   def find(value, root = @root)
-    if root.nil?
-      return "Node not found"
+    return 'Node not found' if root.nil?
+
+    return root if value == root.data
+
+    if value > root.data
+      find(value, root.right)
     else
-      if value == root.data
-        return root
-      else
-        if value > root.data
-          find(value, root.right)
-        else
-          find(value, root.left)
-        end
-      end
+      find(value, root.left)
     end
   end
 
@@ -126,106 +107,84 @@ class Tree
     arr_of_nodes = []
     root = @root
 
-      queue.enq(root)
+    queue.enq(root)
 
-      queue.enq(root.left)
-      queue.enq(root.right)
+    queue.enq(root.left)
+    queue.enq(root.right)
+    arr_of_nodes.push(queue.deq)
+    until queue.empty?
       arr_of_nodes.push(queue.deq)
-      while !queue.empty?
-        arr_of_nodes.push(queue.deq)
-        root = arr_of_nodes[-1]
-        if !root.left.nil?
-          queue.enq(root.left)
-        end
-        if !root.right.nil?
-          queue.enq(root.right)
-        end
+      root = arr_of_nodes[-1]
+      queue.enq(root.left) unless root.left.nil?
+      queue.enq(root.right) unless root.right.nil?
     end
-    arr_of_nodes.map { |element| element.data}
+    arr_of_nodes.map { |element| element.data }
   end
 
   def inorder(root = @root)
-    if root.nil?
-      return @@inorder_arr
-    end
+    return @@inorder_arr if root.nil?
+
     inorder(root.left)
     @@inorder_arr.push(root.data)
     inorder(root.right)
   end
 
   def postorder(root = @root)
-    if root.nil?
-      return @@postorder_arr
-    end
+    return @@postorder_arr if root.nil?
+
     postorder(root.left)
     postorder(root.right)
     @@postorder_arr.push(root.data)
   end
 
   def preorder(root = @root)
-    if root.nil?
-      return @@preorder_arr
-    end
+    return @@preorder_arr if root.nil?
+
     @@preorder_arr.push(root.data)
     preorder(root.left)
     preorder(root.right)
   end
 
   def height(node = @root)
-    if node.nil?
-      return -1
-    end
-    if !node.is_a?(Node)
-      node = find(node)
-    end
+    return -1 if node.nil?
+
+    node = find(node) unless node.is_a?(Node)
     left_height = height(node.left)
     right_height = height(node.right)
 
-    heightT = left_height > right_height ? left_height + 1 : right_height + 1
-    heightT
+    left_height > right_height ? left_height + 1 : right_height + 1
   end
 
   def depth(value, root = @root)
-    if root.nil?
-      return -1
-    end
+    return -1 if root.nil?
 
     dist = -1
-    if root.data == value
-      return dist + 1
-    end
+    return dist + 1 if root.data == value
+
     dist = depth(value, root.left)
-    if dist >= 0
-      return dist + 1
-    end
+    return dist + 1 if dist >= 0
+
     dist = depth(value, root.right)
-    if dist >= 0
-      return dist + 1
-    end
-    return dist
+    return dist + 1 if dist >= 0
+
+    dist
   end
 
   def balanced?(root = @root)
     left_height = height(root.left)
     right_height = height(root.right)
 
-    if (left_height - right_height).abs > 1
-      return false
-    end
+    return false if (left_height - right_height).abs > 1
 
-    if root.left != nil
-      balanced?(root.left)
-    end
-    if root.right != nil
-      balanced?(root.right)
-    end
+    balanced?(root.left) unless root.left.nil?
+    balanced?(root.right) unless root.right.nil?
 
-    return true
+    true
   end
 
   def rebalance
     if balanced?
-      puts "Tree is already balanced"
+      puts 'Tree is already balanced'
     else
       @root = build_tree(inorder)
     end
@@ -240,43 +199,34 @@ class Tree
   private
 
   def no_child?(node)
-    if node.right.nil? && node.left.nil?
-      true
-    end
+    true if node.right.nil? && node.left.nil?
     false
   end
 
   def single_child?(node)
-    if node.right != nil
-      if node.right.right.nil? && node.right.left.nil?
-        return true
-      end
+    unless node.right.nil?
+      return true if node.right.right.nil? && node.right.left.nil?
+
       false
     end
-    if node.left != nil
-      if node.left.right.nil? && node.left.left.nil?
-        return true
-      end
+    unless node.left.nil?
+      return true if node.left.right.nil? && node.left.left.nil?
+
       false
     end
     false
   end
 
   def two_children?(node)
-    if node.left.nil? || node.right.nil?
-      false
-    end
+    false if node.left.nil? || node.right.nil?
     true
   end
 
   def right_or_left(node)
-    if node.right != nil && node.left.nil?
-      return "right"
-    elsif node.left != nil && node.right.nil?
-      return "left"
+    if !node.right.nil? && node.left.nil?
+      'right'
+    elsif !node.left.nil? && node.right.nil?
+      'left'
     end
   end
-
- 
 end
-

@@ -1,14 +1,22 @@
 require_relative 'lib/tree'
 
-t1 = Tree.new([1])
+tree = Tree.new(Array.new(15) { rand(1..100) })
 
-t1.insert(3)
-t1.insert(4)
+p tree.balanced?
+tree.pretty_print
+p tree.inorder
+p tree.postorder
+p tree.preorder
+p tree.level_order
 
+tree.insert(500)
+tree.insert(344)
+tree.insert(121)
 
-t1.pretty_print
-p t1.balanced?
-
-t1.rebalance
-t1.pretty_print
-p t1.balanced?
+p tree.balanced?
+tree.rebalance
+p tree.balanced?
+p tree.inorder
+p tree.postorder
+p tree.preorder
+p tree.level_order
