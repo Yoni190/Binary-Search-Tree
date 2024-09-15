@@ -221,7 +221,14 @@ class Tree
     end
 
     return true
+  end
 
+  def rebalance
+    if balanced?
+      puts "Tree is already balanced"
+    else
+      @root = build_tree(inorder)
+    end
   end
 
   def pretty_print(node = @root, prefix = '', is_left = true)

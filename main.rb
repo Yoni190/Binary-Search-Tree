@@ -8,3 +8,7 @@ t1.insert(4)
 
 t1.pretty_print
 p t1.balanced?
+
+t1.rebalance
+t1.pretty_print
+p t1.balanced?
