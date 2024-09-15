@@ -205,6 +205,25 @@ class Tree
     return dist
   end
 
+  def balanced?(root = @root)
+    left_height = height(root.left)
+    right_height = height(root.right)
+
+    if (left_height - right_height).abs > 1
+      return false
+    end
+
+    if root.left != nil
+      balanced?(root.left)
+    end
+    if root.right != nil
+      balanced?(root.right)
+    end
+
+    return true
+
+  end
+
   def pretty_print(node = @root, prefix = '', is_left = true)
     pretty_print(node.right, "#{prefix}#{is_left ? '│   ' : '    '}", false) if node.right
     puts "#{prefix}#{is_left ? '└── ' : '┌── '}#{node.data}"
